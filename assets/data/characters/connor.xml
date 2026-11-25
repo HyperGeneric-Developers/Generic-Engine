@@ -1,5 +1,5 @@
 <!DOCTYPE codename-engine-character>
-<character x="-180" y="90" scale="0.8" icon="connor">
+<character x="-180" y="90" scale="0.8" color="#FF74DC">
 	<anim name="idle" anim="connor idle" fps="12"/>
 	<anim name="singDOWN" anim="connor down" x="6" y="9" fps="12"/>
 	<anim name="singRIGHT" anim="connor right" x="-3" y="3" fps="12"/>

@@ -16,9 +16,10 @@ function postCreate() {
 	insert(0, titlecard);
 	titlecard.playAnim("evil");
 	
-	story = new FunkinSprite();
-    story.loadSprite(Paths.image("stages/evil/evilStory"));
-	story.screenCenter();
+	story = new FunkinSprite(0, 0, Paths.image("stages/evil/evilStory"));
+	story.setGraphicSize(FlxG.width, FlxG.height);
+	story.updateHitbox();
+	story.antialiasing = Options.antialiasing;
     story.alpha = 0;
 	story.color = FlxColor.BLACK;
 	story.addAnim("1", "1", 1, true);

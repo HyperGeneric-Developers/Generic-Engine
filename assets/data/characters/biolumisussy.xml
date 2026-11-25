@@ -1,5 +1,5 @@
 <!DOCTYPE codename-engine-character>
-<character color="#1FF8FF">
+<character x="250" y="450" scale="0.4" antialiasing="false" camx="-29" camy="0" color="#1FF8FF">
 	<anim name="idle" anim="biolumisussy idle"/>
 	<anim name="singDOWN" anim="biolumisussy down" fps="16"/>
 	<anim name="singRIGHT" anim="biolumisussy right" fps="16"/>

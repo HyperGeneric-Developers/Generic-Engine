@@ -35,6 +35,13 @@ function postCreate() {
 	FlxG.cameras.add(rightCamera, false);
 	FlxG.cameras.add(camHUD, false);
 	
+	line = new FunkinSprite(107, 0, Paths.image("stages/idk/linethattooktoolongtoimplement"));
+	line.scale.set(1.07, 1.07);
+	line.addAnim("idle", "linethattooktoolongtoimplement idle", 6, true);
+	insert(members.indexOf(dad, bf), line);
+	line.cameras = [camHUD];
+	line.playAnim("idle");
+	line.alpha = 0;
 	var point = dad.getCameraPosition();
     camFollow_left.setPosition(point.x - 150, point.y + 28);
     leftCamera.follow(camFollow_left, 0.04);
@@ -60,10 +67,12 @@ function stepHit(curStep:Int) {
 		leftCamera.visible = rightCamera.visible = true;
 		FlxTween.tween(rightCamera, {y: 0}, 1, {ease: FlxEase.quartOut});
 		FlxTween.tween(leftCamera, {y: 0}, 1, {ease: FlxEase.quartOut});
+		FlxTween.tween(line, {alpha: 1}, 1, {ease: FlxEase.quadOut});
 	} else if (curStep == 912) {
 		leftCamera.visible = rightCamera.visible = true;
 		FlxTween.tween(rightCamera, {y: 720}, 1, {ease: FlxEase.quartOut});
 		FlxTween.tween(leftCamera, {y: -720}, 1, {ease: FlxEase.quartOut});
+		FlxTween.tween(line, {alpha: 0}, 1, {ease: FlxEase.quadOut});
 	} else if (curStep == 916) {
 		leftCamera.visible = rightCamera.visible = false;
 		FlxG.cameras.remove(leftCamera, false);

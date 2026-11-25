@@ -113,14 +113,16 @@ function getSongRank(acc:Int):String {
 	}
 }
 
+//temp remove because the game keeps crashing for whatever reason
 public static var lastMenu:String;
-function onSongEnd(event){	
+/*function onSongEnd(event){	
 	// idk guys
-	if (!PlayState.chartingMode || !PlayState.isStoryMode) {
-		event.cancel();
+	if (lastMenu != "Gallery") return;
+
+	event.cancel();
 		
-		if (validScore) {
-			#if !switch
+	if (validScore) {
+		#if !switch
 			FunkinSave.setSongHighscore(PlayState.SONG.meta.name, PlayState.difficulty, PlayState.variation, {
 			score: songScore,
 			misses: misses,
@@ -128,10 +130,6 @@ function onSongEnd(event){
 			hits: hits,
 			date: Date.now().toString()
 			}, PlayState.getSongChanges());
-			#end
-			
-			if (lastMenu == "Freeplay") FlxG.switchState(new FreeplayState());
-			else if (lastMenu == "Gallery") FlxG.switchState(new ModState("PODGallery")); 
-		}
-	} 
-}
+		#end
+	}
+}*/

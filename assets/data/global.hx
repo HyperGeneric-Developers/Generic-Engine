@@ -57,5 +57,4 @@ function update(elapsed:Float):Void {
     }
 }
 
-function postGameStart()
-    FlxG.game._requestedState = new ModState('PODWarningState');
+function postGameStart() FlxG.game._requestedState = new ModState('PODWarningState');

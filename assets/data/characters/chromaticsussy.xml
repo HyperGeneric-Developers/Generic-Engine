@@ -1,8 +1,8 @@
 <!DOCTYPE codename-engine-character>
-<character icon="chromaticsussy">
-	<anim name="idle" anim="chromaticsussy idle" fps="4" loop="true"/>
-	<anim name="singDOWN" anim="chromaticsussy down" fps="12"/>
-	<anim name="singRIGHT" anim="chromaticsussy right" fps="12"/>
-	<anim name="singLEFT" anim="chromaticsussy left" fps="12"/>
-	<anim name="singUP" anim="chromaticsussy up" fps="12"/>
+<character icon="chromaticsussy" camx="50" camy="20" x="-100" y="360" scale="0.65">
+	<anim name="idle" anim="chromaticsussy idle" x="-50" y="1.67" fps="4" loop="true"/>
+	<anim name="singDOWN" anim="chromaticsussy down" x="-61.67" y="10" fps="12"/>
+	<anim name="singRIGHT" anim="chromaticsussy right" x="-61.67" y="6.67" fps="12"/>
+	<anim name="singLEFT" anim="chromaticsussy left" x="-43.33" y="0.33" fps="12"/>
+	<anim name="singUP" anim="chromaticsussy up" x="-45" y="15" fps="12"/>
 </character>

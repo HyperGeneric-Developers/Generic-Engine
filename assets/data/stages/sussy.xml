@@ -1,5 +1,5 @@
 <!DOCTYPE codename-engine-stage>
-<stage startCamPosX="870" startCamPosY="-170" folder="stages/sussys/" zoom="1.3" name="sussy">
+<stage startCamPosX="870" startCamPosY="-170" folder="stages/sussys/" zoom="1.56" name="sussy">
 	<sprite x="-839.492760464011" sprite="1sky" y="-92.5670406669664" type="none" scalex="2.51214391743159" scrollx="0.25" scaley="2.25660146101926" name="sky"/>
 	<sprite x="-375" scroll="0.8" sprite="brownsussytower" y="-149" type="none" scale="2" name="brownsussytower"/>
 	<sprite x="120.389755254081" scroll="0.9" sprite="treebg" y="-187.610244745775" type="none" scale="2" name="treebg"/>

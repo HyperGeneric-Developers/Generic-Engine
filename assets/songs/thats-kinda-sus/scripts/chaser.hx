@@ -3,7 +3,7 @@ import flixel.ui.FlxButton;
 
 var sussidex;
 var titlecard;
-
+var canClick:Bool = false;
 function postCreate() {
 	titlecard = new FlxSprite();
     titlecard.loadGraphic(Paths.image("game/titlecards/thatskindasus_titlecard"));
@@ -18,20 +18,25 @@ function postCreate() {
 function create() {
 	sussidex = new FlxSprite();
     sussidex.loadGraphic(Paths.image("stages/sussys/sussidex"));
-	sussidex.x = 0;
+	sussidex.x = -200;
     sussidex.y = 320;
 	sussidex.scale.set(0.6, 0.6);
     sussidex.cameras = [camHUD];
 	sussidex.updateHitbox();
+	sussidex.alpha = 0.3;
 	add(sussidex);
 }
 
 function update(elapsed:Float){	
-	if (mouseOverlaps(sussidex, camHUD) && FlxG.mouse.justPressed) {
+	if (mouseOverlaps(sussidex, camHUD) && FlxG.mouse.justPressed && canClick) {
 			PlayState.loadSong("screweth", "normal", false, false);
 			FlxG.switchState(new PlayState());
 			trace('what the fuck');
 	}
+	if (mouseOverlaps(sussidex, camHUD)) {
+		sussidex.alpha = 1;
+		
+	} else {sussidex.alpha = 0.3;}
 }
 
 function mouseOverlaps(sprite:FlxBasic, ?camera:FlxCamera) {
@@ -46,6 +51,8 @@ function stepHit(curStep:Int) {
         FlxTween.tween(titlecard, {alpha: 1}, 0.8, {ease: FlxEase.quadInOut});
 		FlxTween.tween(titlecard.scale, {x: 1.1, y: 1.1}, 0.8, {ease: FlxEase.quadInOut});
 		FlxTween.tween(titlecard, { y: 100 }, 0.5, {ease: FlxEase.quadInOut});
+		FlxTween.tween(sussidex, {x : 0}, 2, {ease: FlxEase.quadInOut});
+		canClick = true;
 	} else if (curStep == 158) {
 		FlxTween.tween(titlecard, {alpha: 0}, 1, {ease: FlxEase.quadInOut});
     }

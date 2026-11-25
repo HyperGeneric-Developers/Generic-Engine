@@ -1,8 +1,8 @@
 <!DOCTYPE codename-engine-character>
-<character color="#D7F6FF">
-	<anim name="idle" anim="tasksussy idle" fps="12"/>
-	<anim name="singDOWN" anim="tasksussy down" fps="16"/>
-	<anim name="singRIGHT" anim="tasksussy right" fps="16"/>
-	<anim name="singLEFT" anim="tasksussy left" fps="16"/>
-	<anim name="singUP" anim="tasksussy up" fps="16"/>
+<character x="-260" y="300" scale="0.65" antialiasing="false" camx="70" camy="20" color="#D7F6FF">
+	<anim name="idle" anim="tasksussy idle" x="-50" y="1.67" fps="12"/>
+	<anim name="singDOWN" anim="tasksussy down" x="-61.67" y="10" fps="12"/>
+	<anim name="singRIGHT" anim="tasksussy right" x="-61.67" y="6.67" fps="12"/>
+	<anim name="singLEFT" anim="tasksussy left" x="-43.33" y="0.33" fps="12"/>
+	<anim name="singUP" anim="tasksussy up" x="-45" y="15" fps="12"/>
 </character>

@@ -11,13 +11,29 @@ class HScript extends Script {
 	public var expr:Expr;
 	public var code:String = null;
 	//public var folderlessPath:String;
-	var __importedPaths:Array<String>;
+	var __importedPaths:Map<String, Bool>;
 
 	public static function initParser() {
 		var parser = new Parser();
 		parser.allowJSON = parser.allowMetadata = parser.allowTypes = true;
 		parser.preprocessorValues = Script.getDefaultPreprocessors();
 		return parser;
+	}
+
+	/** Pool of idle parsers, reused across script instances to avoid repeated Parser construction. **/
+	private static var __parserPool:Array<Parser> = [];
+
+	private static function getParser():Parser {
+		var parser = __parserPool.pop();
+		if (parser == null)
+			return initParser();
+		parser.line = 1; // reusing a parser only requires resetting `line`; all other vars get reset on parse
+		return parser;
+	}
+
+	private static function returnParser(parser:Parser) {
+		if (parser != null)
+			__parserPool.push(parser);
 	}
 
 	public override function onCreate(path:String) {
@@ -29,9 +45,9 @@ class HScript extends Script {
 			if(Assets.exists(rawPath)) code = Assets.getText(rawPath);
 		} catch(e) Logs.error('Error while reading $path: ${Std.string(e)}');
 
-		parser = initParser();
+		parser = getParser();
 		//folderlessPath = Path.directory(path);
-		__importedPaths = [path];
+		__importedPaths = [path => true];
 
 		interp.errorHandler = _errorHandler;
 		interp.warnHandler = _warnHandler;
@@ -53,7 +69,7 @@ class HScript extends Script {
 
 	public override function loadFromString(code:String) {
 		try {
-			if (code != null && code.trim() != "")
+			if (code != null && code.length > 0)
 				expr = parser.parseString(code, fileName);
 		} catch(e:Error) {
 			_errorHandler(e);
@@ -64,41 +80,96 @@ class HScript extends Script {
 		return this;
 	}
 
-	private function importFailedCallback(cl:Array<String>, ?asName:String):Bool {
-		if(_importFailedCallback(cl, "source/") || _importFailedCallback(cl, "")) {
+	//region custom class import
+	private function importFailedCallback(cl:Array<String>, ?asName:String, ?isWildcard:Bool):Bool {
+		if(_importFailedCallback(cl, "source/", isWildcard) || _importFailedCallback(cl, "", isWildcard)) {
 			return true;
 		}
 		return false;
 	}
-	private function _importFailedCallback(cl:Array<String>, prefix:String):Bool {
-		var assetsPath = 'assets/$prefix${cl.join("/")}';
-		for(hxExt in ["hx", "hscript", "hsc", "hxs"]) {
-			var p = '$assetsPath.$hxExt';
-			if (__importedPaths.contains(p))
-				return true; // no need to reimport again
-			if (Assets.exists(p)) {
-				var code = Assets.getText(p);
-				var expr:Expr = null;
-				try {
-					if (code != null && code.trim() != "") {
-						parser.line = 1; // fun fact: this is all you need to reuse a parser without issues. all the other vars get reset on parse.
-						expr = parser.parseString(code, cl.join("/") + "." + hxExt);
-					}
-				} catch(e:Error) {
-					_errorHandler(e);
-				} catch(e) {
-					_errorHandler(new Error(ECustom(e.toString()), 0, 0, fileName, 0));
+
+	private function _runScriptAsset(p:String, origin:String):Bool {
+		if (__importedPaths.exists(p))
+			return true; // no need to reimport again
+		if (Assets.exists(p)) {
+			var code = Assets.getText(p);
+			var expr:Expr = null;
+			try {
+				if (code != null && code.length > 0) {
+					parser.line = 1; // fun fact: this is all you need to reuse a parser without issues. all the other vars get reset on parse.
+					expr = parser.parseString(code, origin);
 				}
-				if (expr != null) {
-					@:privateAccess
-					interp.exprReturn(expr);
-					__importedPaths.push(p);
-				}
-				return true;
+			} catch(e:Error) {
+				_errorHandler(e);
+			} catch(e) {
+				_errorHandler(new Error(ECustom(e.toString()), 0, 0, fileName, 0));
 			}
+			if (expr != null) {
+				@:privateAccess
+				interp.exprReturn(expr);
+				__importedPaths.set(p, true);
+			}
+			return true;
 		}
 		return false;
 	}
+
+	static final hxExts = ["hx", "hscript", "hsc", "hxs"];
+
+	private function _importFailedCallback(cl:Array<String>, prefix:String, ?isWildcard:Bool):Bool {
+		if(isWildcard) return _importWildcard(cl, prefix);
+
+		var assetsPath = 'assets/$prefix${cl.join("/")}';
+		for (hxExt in hxExts) {
+			final p = '$assetsPath.$hxExt';
+			final origin = cl.join('/') + '.' + hxExt;
+			if (_runScriptAsset(p, origin)) return true;
+		}
+		return false;
+	}
+
+	//region custom class import wildcard
+	private function _importWildcard(cl:Array<String>, prefix:String):Bool {
+		final p = cl.copy();
+		if (p.length > 0 && p[p.length - 1] == "*") p.pop();
+
+		final relativeDir = p.join("/");
+		return _loadWildcardDirScripts(prefix + relativeDir, relativeDir);
+	}
+
+	// the uh `/`
+	private static inline function formatDirectory(path:String):String {
+		return (path.length > 0 && !path.endsWith("/")) ? '$path/' : path;
+	}
+
+	// TODO: optimize this since it's running the folder scan twice - Jamextreme140
+	private function _loadWildcardDirScripts(dir:String, relDir:String):Bool {
+		var finished = false;
+
+		// load files
+		for(f in Paths.getFolderContent(dir, false)) {
+			for (i in hxExts)
+				if (f.endsWith('.$i')) {
+					final path = 'assets/${formatDirectory(dir)}$f';
+					final origin = (relDir.length > 0 ? '$relDir/' : '') + f;
+
+					if (_runScriptAsset(path, origin)) finished = true;
+					break;
+				}
+		}
+
+		// recurse directories
+		for(direct in Paths.getFolderDirectories(dir, false)) {
+			final nextDir = formatDirectory(dir) + direct;
+			final nextRelDir = formatDirectory(relDir) + direct;
+
+			if(_loadWildcardDirScripts(nextDir, nextRelDir)) finished = true;
+		}
+
+		return finished;
+	}
+	//endregion
+	//endregion
 
 	private function _errorHandler(error:Error) {
 		var fileName = error.origin;
@@ -158,15 +229,17 @@ class HScript extends Script {
 
 		interp.allowStaticVariables = interp.allowPublicVariables = false;
 		var savedVariables:Map<String, Dynamic> = [];
+		var defaultVars = Script.getDefaultVariables(this);
 		for(k=>e in interp.variables) {
-			if (!Reflect.isFunction(e)) {
+			if (!Reflect.isFunction(e) && !defaultVars.exists(k)) {
 				savedVariables[k] = e;
 			}
 		}
 		var oldParent = interp.scriptObject;
+		returnParser(parser);
 		onCreate(path);
 
-		for(k=>e in Script.getDefaultVariables(this))
+		for(k=>e in defaultVars)
 			set(k, e);
 
 		load();
@@ -180,11 +253,10 @@ class HScript extends Script {
 
 	private override function onCall(funcName:String, parameters:Array<Dynamic>):Dynamic {
 		if (interp == null) return null;
-		if (!interp.variables.exists(funcName)) return null;
 
 		var func = interp.variables.get(funcName);
 		if (func != null && Reflect.isFunction(func))
-			return Reflect.callMethod(null, func, parameters);
+			return Reflect.callMethod(null, func, parameters == null ? Script._EMPTY_ARGS : parameters);
 
 		return null;
 	}
@@ -195,6 +267,8 @@ class HScript extends Script {
 
 	public override function set(val:String, value:Dynamic) {
 		interp.variables.set(val, value);
+		// A runtime-injected variable may shadow a previously-cached VNotFound/type-resolve result, so drop stale cache entries.
+		interp.invalidateCache();
 	}
 
 	public override function trace(v:Dynamic) {
@@ -207,5 +281,12 @@ class HScript extends Script {
 
 	public override function setPublicMap(map:Map<String, Dynamic>) {
 		this.interp.publicVariables = map;
+	}
+
+	override public function destroy() {
+		returnParser(parser);
+		parser = null;
+		interp = null; // TODO: make a proper interpreter cleanup
+		super.destroy();
 	}
 }

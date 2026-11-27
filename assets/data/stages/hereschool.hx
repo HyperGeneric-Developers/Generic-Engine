@@ -1,70 +1,12 @@
-import flixel.addons.util.FlxScene;
-import foxlite.FoxScene;
-import foxlite.FoxModel;
-import foxlite.FoxShader;
-import foxlite.texture.FoxTexture;
-import foxlite.material.FoxMaterial;
-import foxlite.mesh.FoxQuadMesh;
-import foxlite.stencil.FoxStencilAction;
-import foxlite.sky.FoxPanoramaSky;
-import foxlite.flixel.FoxFlxSprite;
-import foxlite.funkin.FoxFunkinSprite;
-import foxlite.cache.FoxCache;
-import foxlite.lights.FoxDirectionalLight;
-import foxlite.flixel.FoxRenderMetrics;
-import foxlite.renderer.FoxRenderer;
-import foxlite.loaders.FoxLoaderUtil;
-import flixel.FlxG;
-import openfl.filters.BitmapFilter;
-import foxlite.extras.FoxFPSCamera;
-
 var studentPassersL:Array = ["pin", "bully_final"];
 var studentPassersR:Array = ["JumpRope", "GottaSweep"];
-
-var cam:FoxFPSCamera;
-
-var pencil:FoxFlxSprite;
-var baldi:FoxFlxSprite;
 
 var school;
 var blackOverlay:FlxSprite;
 var thinkpad:FlxSprite;
 
 function create() {
-	FoxRenderer.initLibs();
-	FoxLoaderUtil.initPathClass(Paths);
-	
-	var scene = new FoxScene(FlxG.width, FlxG.height);
-	scene.scrollFactor.set(0, 0);
-	scene.zoomFactor = 0;
-
-	cam = new FoxFPSCamera();
-	scene.foxCameras.push(cam);
-	cam.enableControls = false;
-
-	school = new FoxModel();
-	school.loadOBJ("models/haha baldi.obj", ["NO_ALPHA_SCISSOR", "NO_SHADOW_CODE"]);
-	scene.add(school);
-	
-	add(scene);
-	
-	var basics = FoxShader.fromAsset("foxlite/basic", ["UNSHADED"]);
-	
-	pencil = new FoxFunkinSprite(bf, FoxMaterial.create(["BILLBOARD", ["bitmap" => FoxTexture.wrap(bf.pixels)]]), .0027);
-	pencil.material.renderPriority = 2;
-	scene.add(pencil);
-	pencil.y = .9;
-	pencil.x = 1.25;
-	pencil.z = 1.2;
-
-	baldi = new FoxFunkinSprite(dad, FoxMaterial.create(basics), .0027);
-	baldi.material.renderPriority = 2;
-	scene.add(baldi);
-	baldi.y = .78;
-	baldi.x = -1.45;
-	baldi.z = 1.2;
-	
-/*	blackOverlay = new FlxSprite(0, 720);
+	blackOverlay = new FlxSprite(0, 720);
     blackOverlay.makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
     blackOverlay.scrollFactor.set(0, 0);
     blackOverlay.alpha = 1;
@@ -153,25 +95,11 @@ function create() {
 	charRight.scale.set(3.3, 3.3);
 	charRight.updateHitbox();
 	charRight.cameras = [camGame];
-	add(charRight);*/
+	add(charRight);
 }
 
 function update(_) {
 //	whiteout.alpha = blackout.alpha = thinkpad.alpha;
-	var cg = PlayState.instance.camGame;
-	var ch = PlayState.instance.camHUD;
-	var x = cg.scroll.x;
-	var y = cg.scroll.y;
-	cam.position.setTo(
-		(x * .005 + 0.05) * 0.3,
-		0.8 + y * .001 + .05, 2.5
-	);
-//	cam.rotation.x = -0.3 - y*.001;
-	cam.rotation.y = x*.0001;
-}
-
-function destroy() {
-	FoxCache.instance.freeResources();
 }
 
 var leftRun:Float = FlxG.random.int(784, 1152);
@@ -206,11 +134,8 @@ function stepHit(curStep:Int) {
 		camHUD.bgColor = 0;
 	}
 	
-	else if (curStep == leftRun) {
-		FlxTween.tween(charLeft, {x: -3500}, 3);
-	} else if (curStep == rightRun) {
-		FlxTween.tween(charRight, {x: 3500}, 3);
-	}
+	if (curStep == leftRun) FlxTween.tween(charLeft, {x: -3500}, 3);
+	if (curStep == rightRun) FlxTween.tween(charRight, {x: 3500}, 3);
 	}
 }
 

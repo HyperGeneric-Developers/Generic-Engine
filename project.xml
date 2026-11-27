@@ -107,9 +107,6 @@
 	<!-- Comment this out to use the default OpenFL assets system for the assets/ folder. !-->
 	<define name="USE_ADAPTED_ASSETS" unless="web" />
 
-	<!-- Comment this out to disable support for Foxlite 3D Rendering (reduces compile times) !-->
-	<!-- <define name="THREE_D_SUPPORT" unless="STRIPPED_COMPILE" /> -->
-
 	<!-- Comment this out to disable support for Nape integration (flixel.addons.nape) (reduces compile times) !-->
 	<!-- define name="NAPE_ENABLED" unless="STRIPPED_COMPILE" (we dont need this right guys) !-->
 
@@ -133,16 +130,15 @@
 	<define name="disable-version-check"/>
 	<haxedef name="disable-version-check"/>
 
+	<haxedef name="cne"/>
 	<haxedef name="no-deprecation-warnings"/>
 	<haxedef name="DISCORD_DISABLE_IO_THREAD" if="DISCORD_RPC"/>
-	<haxedef name="cne"/>
 
 	<haxelib name="flixel" />
 	<haxelib name="flixel-addons" />
 
 	<haxelib name="hxvlc" if="VIDEO_CUTSCENES" />
-	<!-- <haxelib name="away3d" if="THREE_D_SUPPORT"/> -->
-	<haxelib name="foxlite" if="THREE_D_SUPPORT"/>
+
 	<!-- <haxelib name="format" /> -->
 	<haxelib name="flixel-animate" />
 	<haxelib name="nape-haxe4" if="NAPE_ENABLED"/>
@@ -162,11 +158,11 @@
 
 	<source name="source" />
 
-	<define name="PRELOAD_ALL" unless="web" />
-	<define name="NO_PRELOAD_ALL" unless="PRELOAD_ALL"/>
+	<define name="PRELOAD_ALL" 			unless="web" />
+	<define name="NO_PRELOAD_ALL" 	unless="PRELOAD_ALL"/>
 
-	<library name="assets"    preload="true"  if="PRELOAD_ALL"/>
-	<library name="assets"    preload="false" if="NO_PRELOAD_ALL" />
+	<library name="assets"    preload="true"  	if="PRELOAD_ALL"/>
+	<library name="assets"    preload="false" 	if="NO_PRELOAD_ALL" />
 
 	<section unless="TEST_BUILD">
 		<assets path="assets/"    rename="assets"	exclude="*.ogg" if="web"/>

@@ -5,11 +5,11 @@
 
 		<!-- Hxcpp, OpenFL & Lime (Required for Flixel) -->
 		<git name="hxcpp" url="https://github.com/CodenameCrew/cne-hxcpp"/>
-		<lib name="openfl" version="9.5.2"/>
-		<lib name="lime" version="8.3.2"/>
+		<gir name="openfl" url="https://github.com/HyperGeneric-Developers/normal-openfl"/>
+		<git name="lime" url="https://github.com/HyperGeneric-Developers/normal-lime"/>
 
 		<!-- Flixel -->
-		<git name="flixel" url="https://github.com/CodenameCrew/cne-flixel" ref="old" />
+		<git name="flixel" url="https://github.com/HyperGeneric-Developers/normal-flixel" />
 		<git name="flixel-addons" url="https://github.com/CodenameCrew/cne-flixel-addons" ref="old"/>
 
 		<!-- Other Libraries -->

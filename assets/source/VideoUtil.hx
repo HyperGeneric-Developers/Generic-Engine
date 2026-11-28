@@ -34,7 +34,7 @@ class VideoUtil {
 
 			var video:FlxVideoSprite = new FlxVideoSprite();
 			video.camera = camera;
-			video.bitmap.onFormatSetup.add(function() {
+			video.bitmap.onVideoFormatSetup.add(function() {
 				if (!dynamic) {
 					video.setGraphicSize(Std.int(camera.width), camera.height);
 					video.updateHitbox();
@@ -73,7 +73,7 @@ class VideoUtil {
 			var video:FlxVideoSprite = new FlxVideoSprite();
 			video.load(url, options);
 			video.camera = camera;
-			video.bitmap.onFormatSetup.add(function() {
+			video.bitmap.onVideoFormatSetup.add(function() {
 				if (!dynamic) {
 					video.setGraphicSize(Std.int(camera.width), camera.height);
 					video.updateHitbox();

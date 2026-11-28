@@ -1,10 +1,10 @@
-# Generic Engine
-Generic Engine is a fork of Codename Engine built specifically for "FNF: Pack of DOOM". 
+# Normal Engine
+Normal Engine is a fork of Codename Engine 1.0.1, originally built specifically for "FNF: Pack of DOOM". 
 
 This repository is only public for testing purposes.
 
 > [!NOTE]
-> Generic Engine is NOT meant for commercial/modding use outside of Pack of DOOM. Please do not use this engine for your own mods without our permission. 
+> Normal Engine is a WIP engine, and is meant exclusively for HyperGeneric mods/projects. Please do not use this engine for your own mods without our permission. 
 
 > [!WARNING]
 > This build is a WORK IN PROGRESS!! If you want to test this build, expect lots of bugs and whatnot for now! 
@@ -15,10 +15,9 @@ This repository is only public for testing purposes.
 * A Lightweight Build with Less Unnecessary Files!
 * Custom Utilities/Utils for specific things
 * An Awesome and Compact FPS/Debug Counter
-* Pack of DOOM supported
 * Fully supported Mac and Linux native builds! (WIP) 
-* Mod/DLC Support in the form of "Packs" (PLANNED) 
-* A Full Modding Guide for DLC Packs and Lobby Characters! (PLANNED)
+* Resource Pack/DLC Support (PLANNED) 
+* A Full Modding Guide for DLC Packs and Lobby Characters! (Pack of DOOM, PLANNED)
 </details>
 
 <details>
@@ -32,10 +31,10 @@ This repository is only public for testing purposes.
 <details>
   <summary><h2>What CAN'T you do?</h2></summary>
 
-- You may NOT use the engine directly for your own mod, as it is only meant for Pack of DOOM and possibly other HyperGeneric projects. 
+- You may NOT use the engine directly for your own mod without permission, as it is specifically tailored for Pack of DOOM and other HyperGeneric projects. 
 - You may NOT fork our engine without permission. 
 - You may NOT steal our code (seriously please don't).
-- You may NOT port this mod or engine to mobile or other platforms. Please, don't do it. 
+- You may NOT port this mod or engine to mobile or other platforms. Please, just don't do it. 
 </details>
 
 <details>
